@@ -1,0 +1,37 @@
+name: mono-to-multi-repo
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with: 
+          path: "test"
+#           refs: asdasd
+          token: ${{ secrets.REPO_SECRET }}
+          fetch-depth: 0
+      - uses: actions/checkout@v2
+        with:
+          repository: tagion/monorepo-tools
+          path: tools
+          token: ${{ secrets.REPO_SECRET }}
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: |
+          echo ${GITHUB_REF##*/}
+          branch=${GITHUB_REF##*/}
+          token=${{ secrets.REPO_SECRET }}
+          echo $token
+          cd test
+          git branch
+          git remote add repo1 https://$token@github.com/alexSushko/repo1.git
+          git remote add repo2 https://$token@github.com/alexSushko/repo2.git
+          git fetch --all --no-tags
+          ../tools/monorepo_split.sh $branch repo1:src/repo1 repo2:src/repo2
+        shell: bash
