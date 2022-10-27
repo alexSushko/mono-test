@@ -23,7 +23,8 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Adding markdown
-        run: echo '### Hello world! :rocket:' >> $GITHUB_STEP_SUMMARY
+        run: |
+          echo '### Hello world! :rocket: \n [bsab](http://test)' >> $GITHUB_STEP_SUMMARY
   
   test:
     # The type of runner that the job will run on
